@@ -27,10 +27,6 @@ void insertarBits3(unsigned char* buffer, int bitInicial, unsigned char valor)
         ventana = ventana | ((unsigned int)buffer[byte + 1] << 8);
     }
 
-    // ~mascara limpia (pone en 0) los 3 bits donde va la ficha, sin tocar
-    // el resto de la ventana. Como esos bits ya quedan en 0, aplicar XOR
-    // con el valor nuevo corrido a esa posicion produce el mismo resultado
-    // que un OR (0 XOR bit == bit), pero usando el operador ^.
     unsigned int mascara = (unsigned int)0x07 << desfase;
     unsigned int valorCorrido = ((unsigned int)(valor & 0x07)) << desfase;
     ventana = (ventana & ~mascara) ^ valorCorrido;
