@@ -2,8 +2,8 @@
 
 unsigned char extraerBits3(const unsigned char* buffer, int bitInicial)
 {
-    int byte = bitInicial / 8;
-    int desfase = bitInicial % 8;
+    int byte = bitInicial >> 3;
+    int desfase = bitInicial & 7;
     bool cruzaByte = (desfase > 5);
 
     unsigned int ventana = buffer[byte];
@@ -17,8 +17,8 @@ unsigned char extraerBits3(const unsigned char* buffer, int bitInicial)
 
 void insertarBits3(unsigned char* buffer, int bitInicial, unsigned char valor)
 {
-    int byte = bitInicial / 8;
-    int desfase = bitInicial % 8;
+    int byte = bitInicial >> 3;
+    int desfase = bitInicial & 7;
     bool cruzaByte = (desfase > 5);
 
     unsigned int ventana = buffer[byte];
@@ -45,5 +45,5 @@ int bitsNecesarios(int filas, int columnas)
 
 int bytesNecesarios(int bits)
 {
-    return (bits + 7) / 8;
+    return (bits + 7) >> 3;
 }
