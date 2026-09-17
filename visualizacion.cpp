@@ -4,24 +4,25 @@
 #include "bits.h"
 #include "estado.h"
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 
 void mostrarTableroFichas(const unsigned char* tablero, int filas, int columnas)
 {
-    cout << "    ";
+    cout << "     ";
     for (int c = 0; c < columnas; c++)
     {
-        cout << c << " ";
+        cout << setw(2) << c << " "; //setw() establece el ancho minimo que ocupa el cout
     }
     cout << endl;
 
     for (int f = 0; f < filas; f++)
     {
-        cout << f << " | ";
+        cout << setw(3) << f << " | ";
         for (int c = 0; c < columnas; c++)
         {
-            cout << simboloFicha(obtenerFicha(tablero, columnas, f, c)) << " ";
+            cout << setw(2) << simboloFicha(obtenerFicha(tablero, columnas, f, c)) << " ";
         }
         cout << endl;
     }
