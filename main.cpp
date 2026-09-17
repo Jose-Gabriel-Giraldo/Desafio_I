@@ -14,20 +14,47 @@ int main()
     inicializarGeneradorAleatorio();
     inicializarEstado();
 
-    int filas, columnas;
     cout << "=== Sweet Crush ===" << endl;
 
-    do
+    int filas;
+    while (true)
     {
-        cout << "Numero de filas (minimo 3): ";
+        cout << "Numero de filas (minimo 3, maximo 50): ";
         cin >> filas;
-    } while (filas < 3);
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "Entrada invalida: debe ser un numero entero." << endl;
+            continue;
+        }
+        if (filas < 3 || filas > 50)
+        {
+            cout << "Fuera de rango: debe estar entre 3 y 50." << endl;
+            continue;
+        }
+        break;
+    }
 
-    do
+    int columnas;
+    while (true)
     {
-        cout << "Numero de columnas (minimo 3): ";
+        cout << "Numero de columnas (minimo 3, maximo 50): ";
         cin >> columnas;
-    } while (columnas < 3);
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "Entrada invalida: debe ser un numero entero." << endl;
+            continue;
+        }
+        if (columnas < 3 || columnas > 50)
+        {
+            cout << "Fuera de rango: debe estar entre 3 y 50." << endl;
+            continue;
+        }
+        break;
+    }
 
     unsigned char* tablero;
     int bytesAsignados;
@@ -55,38 +82,98 @@ int main()
         cout << "5. Eliminar columna" << endl;
         cout << "6. Ver tablero en binario" << endl;
         cout << "0. Salir" << endl;
-        cout << "Opcion: ";
-        cin >> opcion;
+
+        while (true)
+        {
+            cout << "Opcion: ";
+            cin >> opcion;
+            if (cin.fail())
+            {
+                cin.clear();
+                cin.ignore(10000, '\n');
+                cout << "Entrada invalida: debe ser un numero entero." << endl;
+                continue;
+            }
+            if (opcion < 0 || opcion > 6)
+            {
+                cout << "Fuera de rango: debe estar entre 0 y 6." << endl;
+                continue;
+            }
+            break;
+        }
 
         if (opcion == 1)
         {
-            int f, c;
-            cout << "Fila (0-" << (filas - 1) << "): ";
-            cin >> f;
-            cout << "Columna (0-" << (columnas - 1) << "): ";
-            cin >> c;
-
-            if (f < 0 || f >= filas || c < 0 || c >= columnas)
+            int f;
+            while (true)
             {
-                cout << "Posicion invalida." << endl;
+                cout << "Fila a eliminar (0-" << (filas - 1) << "): ";
+                cin >> f;
+                if (cin.fail())
+                {
+                    cin.clear();
+                    cin.ignore(10000, '\n');
+                    cout << "Entrada invalida: debe ser un numero entero." << endl;
+                    continue;
+                }
+                if (f < 0 || f >= filas)
+                {
+                    cout << "Fuera de rango: debe estar entre 0 y " << (filas - 1) << "." << endl;
+                    continue;
+                }
+                break;
             }
-            else
+
+            int c;
+            while (true)
             {
-                establecerFicha(tablero, columnas, f, c, VACIO);
-                registrarEliminacionManual();
-
-                aplicarGravedad(tablero, filas, columnas);
-                rellenarVacios(tablero, filas, columnas);
-
-                int fe = 0, cd = 0;
-                procesarCascadas(tablero, filas, columnas, &fe, &cd);
+                cout << "Columna a eliminar (0-" << (columnas - 1) << "): ";
+                cin >> c;
+                if (cin.fail())
+                {
+                    cin.clear();
+                    cin.ignore(10000, '\n');
+                    cout << "Entrada invalida: debe ser un numero entero." << endl;
+                    continue;
+                }
+                if (c < 0 || c >= columnas)
+                {
+                    cout << "Fuera de rango: debe estar entre 0 y " << (columnas - 1) << "." << endl;
+                    continue;
+                }
+                break;
             }
+
+            establecerFicha(tablero, columnas, f, c, VACIO);
+            registrarEliminacionManual();
+
+            aplicarGravedad(tablero, filas, columnas);
+            rellenarVacios(tablero, filas, columnas);
+
+            int fe = 0, cd = 0;
+            procesarCascadas(tablero, filas, columnas, &fe, &cd);
         }
         else if (opcion == 2)
         {
             int pos;
-            cout << "Posicion para la nueva fila (0-" << filas << "): ";
-            cin >> pos;
+            while (true)
+            {
+                cout << "Posicion para la nueva fila (0-" << filas << "): ";
+                cin >> pos;
+                if (cin.fail())
+                {
+                    cin.clear();
+                    cin.ignore(10000, '\n');
+                    cout << "Entrada invalida: debe ser un numero entero." << endl;
+                    continue;
+                }
+                if (pos < 0 || pos > filas)
+                {
+                    cout << "Fuera de rango: debe estar entre 0 y " << filas << "." << endl;
+                    continue;
+                }
+                break;
+            }
             agregarFila(&tablero, &filas, columnas, &bytesAsignados, pos);
             int fe = 0, cd = 0;
             procesarCascadas(tablero, filas, columnas, &fe, &cd);
@@ -94,8 +181,24 @@ int main()
         else if (opcion == 3)
         {
             int pos;
-            cout << "Posicion de la fila a eliminar (0-" << (filas - 1) << "): ";
-            cin >> pos;
+            while (true)
+            {
+                cout << "Posicion de la fila a eliminar (0-" << (filas - 1) << "): ";
+                cin >> pos;
+                if (cin.fail())
+                {
+                    cin.clear();
+                    cin.ignore(10000, '\n');
+                    cout << "Entrada invalida: debe ser un numero entero." << endl;
+                    continue;
+                }
+                if (pos < 0 || pos > filas - 1)
+                {
+                    cout << "Fuera de rango: debe estar entre 0 y " << (filas - 1) << "." << endl;
+                    continue;
+                }
+                break;
+            }
             eliminarFila(&tablero, &filas, columnas, &bytesAsignados, pos);
             int fe = 0, cd = 0;
             procesarCascadas(tablero, filas, columnas, &fe, &cd);
@@ -103,8 +206,24 @@ int main()
         else if (opcion == 4)
         {
             int pos;
-            cout << "Posicion para la nueva columna (0-" << columnas << "): ";
-            cin >> pos;
+            while (true)
+            {
+                cout << "Posicion para la nueva columna (0-" << columnas << "): ";
+                cin >> pos;
+                if (cin.fail())
+                {
+                    cin.clear();
+                    cin.ignore(10000, '\n');
+                    cout << "Entrada invalida: debe ser un numero entero." << endl;
+                    continue;
+                }
+                if (pos < 0 || pos > columnas)
+                {
+                    cout << "Fuera de rango: debe estar entre 0 y " << columnas << "." << endl;
+                    continue;
+                }
+                break;
+            }
             agregarColumna(&tablero, filas, &columnas, &bytesAsignados, pos);
             int fe = 0, cd = 0;
             procesarCascadas(tablero, filas, columnas, &fe, &cd);
@@ -112,8 +231,24 @@ int main()
         else if (opcion == 5)
         {
             int pos;
-            cout << "Posicion de la columna a eliminar (0-" << (columnas - 1) << "): ";
-            cin >> pos;
+            while (true)
+            {
+                cout << "Posicion de la columna a eliminar (0-" << (columnas - 1) << "): ";
+                cin >> pos;
+                if (cin.fail())
+                {
+                    cin.clear();
+                    cin.ignore(10000, '\n');
+                    cout << "Entrada invalida: debe ser un numero entero." << endl;
+                    continue;
+                }
+                if (pos < 0 || pos > columnas - 1)
+                {
+                    cout << "Fuera de rango: debe estar entre 0 y " << (columnas - 1) << "." << endl;
+                    continue;
+                }
+                break;
+            }
             eliminarColumna(&tablero, filas, &columnas, &bytesAsignados, pos);
             int fe = 0, cd = 0;
             procesarCascadas(tablero, filas, columnas, &fe, &cd);
@@ -121,10 +256,6 @@ int main()
         else if (opcion == 6)
         {
             mostrarTableroBinario(tablero, filas, columnas, bytesAsignados);
-        }
-        else if (opcion != 0)
-        {
-            cout << "Opcion invalida." << endl;
         }
     }
 
